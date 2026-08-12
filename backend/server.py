@@ -170,6 +170,16 @@ def get_employee_location(emp_id: str = "1"):
         "history": emp["history"]
     }
 
+@app.get("/api/location/latest")
+def get_latest_location(id: Optional[str] = "1"):
+    return get_employee_location(id)
+
+@app.get("/api/location/history")
+def get_location_history(id: Optional[str] = "1"):
+    emp_loc = get_employee_location(id)
+    return {"id": id, "history": emp_loc.get("history", [])}
+
+
 class LocationPayload(BaseModel):
     id: Optional[str] = "1"
     name: Optional[str] = "Test User"
