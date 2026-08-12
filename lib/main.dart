@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/tracking_provider.dart';
 import 'theme/app_theme.dart';
-import 'widgets/sidebar_navigation.dart';
-import 'widgets/metric_card.dart';
+import 'widgets/slate_sidebar.dart';
+import 'widgets/white_metric_card.dart';
 import 'widgets/employee_card.dart';
 import 'widgets/live_map.dart';
 import 'widgets/location_history.dart';
@@ -23,12 +24,12 @@ class MyApp extends StatelessWidget {
       child: Consumer<TrackingProvider>(
         builder: (context, provider, _) {
           return MaterialApp(
-            title: 'Kubayar Live Location Tracking Dashboard',
+            title: 'Dashboard User Admin Panel',
             debugShowCheckedModeBanner: false,
             themeMode: provider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            home: const KubayarDashboardScreen(),
+            home: const SlateAdminDashboard(),
           );
         },
       ),
@@ -36,15 +37,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class KubayarDashboardScreen extends StatefulWidget {
-  const KubayarDashboardScreen({super.key});
+class SlateAdminDashboard extends StatefulWidget {
+  const SlateAdminDashboard({super.key});
 
   @override
-  State<KubayarDashboardScreen> createState() => _KubayarDashboardScreenState();
+  State<SlateAdminDashboard> createState() => _SlateAdminDashboardState();
 }
 
-class _KubayarDashboardScreenState extends State<KubayarDashboardScreen> {
-  int _selectedNavIndex = 0;
+class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
+  int _selectedNavIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +55,11 @@ class _KubayarDashboardScreenState extends State<KubayarDashboardScreen> {
     return Scaffold(
       body: Row(
         children: [
-          // Left Sidebar (Kubayar Navigation)
+          // Slate Navy Sidebar (Ditto like template image)
           LayoutBuilder(
             builder: (context, constraints) {
               if (MediaQuery.of(context).size.width >= 900) {
-                return SidebarNavigation(
+                return SlateSidebarNavigation(
                   selectedIndex: _selectedNavIndex,
                   onDestinationSelected: (idx) {
                     setState(() => _selectedNavIndex = idx);
@@ -69,203 +70,137 @@ class _KubayarDashboardScreenState extends State<KubayarDashboardScreen> {
             },
           ),
 
-          // Main Center Content Canvas
+          // Main Dashboard Panel Body
           Expanded(
             child: Column(
               children: [
-                // Top Action Header Bar
+                // Top Header Bar matching "Dashboard User Admin Panel"
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-                  color: Theme.of(context).cardColor,
-                  child: Row(
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
                           Text(
-                            'Card Center & Live Fleet',
-                            style: TextStyle(
-                              fontSize: 22,
+                            'Dashboard User Admin Panel',
+                            style: GoogleFonts.ptSerif(
+                              fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              letterSpacing: -0.5,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
+                              color: AppTheme.primaryTeal,
                             ),
                           ),
-                          const Text(
-                            'Real-Time Field Staff Telemetry',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          const Spacer(),
+                          // User Profile dropdown menu (Lorem Ipsum v)
+                          Row(
+                            children: [
+                              Text(
+                                'Lorem Ipsum',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
+                              const Icon(Icons.keyboard_arrow_down,
+                                  size: 18, color: Colors.grey),
+                            ],
                           ),
                         ],
                       ),
-                      const Spacer(),
-
-                      // Search bar
-                      Container(
-                        width: 240,
-                        height: 42,
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(20),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Lorem ipsum dolor sit amet consectetur',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 12,
+                          color: Colors.grey,
                         ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.search_rounded,
-                                size: 18, color: Colors.grey),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: TextField(
-                                decoration: const InputDecoration(
-                                  hintText: 'Search here...',
-                                  border: InputBorder.none,
-                                  hintStyle: TextStyle(fontSize: 13),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-
-                      // Employee Switcher Dropdown
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: provider.selectedEmployeeId,
-                            icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                            items: provider.employeeList.map((e) {
-                              return DropdownMenuItem<String>(
-                                value: e['id'],
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 12,
-                                      backgroundImage:
-                                          NetworkImage(e['avatar']!),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      e['name']!,
-                                      style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (val) {
-                              if (val != null) provider.selectEmployee(val);
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-
-                      // Action Button
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        onPressed: () => provider.refreshLocation(),
-                        icon: const Icon(Icons.refresh_rounded, size: 18),
-                        label: const Text('Sync Telemetry',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
                 ),
 
-                // Main Scrollable Body Content
+                // Main Content Body
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(28),
+                    padding: const EdgeInsets.symmetric(horizontal: 28),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Top Colorful Metric Cards Row (Kubayar Card Center Style)
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              MetricCard(
-                                title: 'Main Balance / Speed',
-                                value: '${emp?.speed ?? 24.5} km/h',
-                                subtitle: 'CARD TYPE: GPS SENDER',
-                                icon: Icons.speed_rounded,
-                                gradientColors: const [
-                                  Color(0xFF0984E3),
-                                  Color(0xFF74B9FF)
-                                ],
-                                badgeText: emp?.status ?? 'Online',
-                              ),
-                              const SizedBox(width: 16),
-                              MetricCard(
-                                title: 'Battery Level',
-                                value: '${emp?.battery ?? 88}%',
-                                subtitle: 'POWER STATUS: NORMAL',
-                                icon: Icons.battery_charging_full_rounded,
-                                gradientColors: const [
-                                  Color(0xFFE17055),
-                                  Color(0xFFFAB1A0)
-                                ],
-                                badgeText: '88%',
-                              ),
-                              const SizedBox(width: 16),
-                              MetricCard(
-                                title: 'Total Telemetry Logs',
-                                value: '${emp?.history.length ?? 20} Logs',
-                                subtitle: 'LAST SYNC: ${emp?.time ?? '10:25 AM'}',
-                                icon: Icons.history_toggle_off_rounded,
-                                gradientColors: const [
-                                  Color(0xFF6C5CE7),
-                                  Color(0xFFA29BFE)
-                                ],
-                                badgeText: 'LIMIT 20',
-                              ),
-                              const SizedBox(width: 16),
-                              MetricCard(
-                                title: 'Field Device Status',
-                                value: emp?.status ?? 'Online',
-                                subtitle: 'AUTO-FOLLOW: ON',
-                                icon: Icons.cell_tower_rounded,
-                                gradientColors: const [
-                                  Color(0xFF00B894),
-                                  Color(0xFF55E6C1)
-                                ],
-                                badgeText: 'GPS READY',
-                              ),
-                            ],
-                          ),
+                        // 3 Top White Stat Cards (1,546 | 687 | 13,249 style)
+                        Row(
+                          children: [
+                            WhiteMetricCard(
+                              title: 'Sed eiusmod tempor',
+                              subtitle: 'Lorem ipsum dolor sit amet',
+                              value: '${(emp?.speed ?? 24.5) * 60}',
+                            ),
+                            const SizedBox(width: 16),
+                            WhiteMetricCard(
+                              title: 'Incididunt ut labore',
+                              subtitle: 'Lorem ipsum dolor sit amet',
+                              value: '${emp?.battery ?? 88}%',
+                            ),
+                            const SizedBox(width: 16),
+                            WhiteMetricCard(
+                              title: 'Dolore magna aliqua',
+                              subtitle: 'Lorem ipsum dolor sit amet',
+                              value: '13,249',
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 20),
 
-                        // Two Column Layout: Employee Card + Controls on Left, Map on Right
+                        // Employee Selector Header Row
+                        Row(
+                          children: [
+                            Text(
+                              'Select Employee: ',
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 13, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: provider.selectedEmployeeId,
+                                  items: provider.employeeList.map((e) {
+                                    return DropdownMenuItem<String>(
+                                      value: e['id'],
+                                      child: Text(e['name']!,
+                                          style: GoogleFonts.montserrat(
+                                              fontSize: 12)),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    if (val != null) provider.selectEmployee(val);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Two Main Cards: Employee Info + Live Map
                         LayoutBuilder(
                           builder: (context, constraints) {
-                            final isWide = constraints.maxWidth >= 900;
-                            if (isWide) {
+                            final isDesktop = constraints.maxWidth >= 900;
+                            if (isDesktop) {
                               return Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(
-                                    width: 360,
+                                    width: 340,
                                     child: Column(
                                       children: [
                                         EmployeeCard(),
@@ -277,7 +212,7 @@ class _KubayarDashboardScreenState extends State<KubayarDashboardScreen> {
                                   const SizedBox(width: 20),
                                   const Expanded(
                                     child: SizedBox(
-                                      height: 580,
+                                      height: 520,
                                       child: LiveMap(),
                                     ),
                                   ),
@@ -299,10 +234,11 @@ class _KubayarDashboardScreenState extends State<KubayarDashboardScreen> {
                             }
                           },
                         ),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 24),
 
-                        // Location History Table at Bottom
+                        // Location History Table
                         const LocationHistoryTable(),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
