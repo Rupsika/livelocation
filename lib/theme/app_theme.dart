@@ -11,19 +11,18 @@ class AppTheme {
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color(0xFF0F172A), // Deep Slate/Navy
+    scaffoldBackgroundColor: const Color(0xFF0F172A),
     colorScheme: const ColorScheme.dark(
       primary: primary,
       secondary: secondary,
       surface: Color(0xFF1E293B),
-      background: Color(0xFF0F172A),
     ),
-    cardTheme: CardTheme(
-      color: const Color(0xFF1E293B).withOpacity(0.85),
+    cardTheme: CardThemeData(
+      color: const Color(0xFF1E293B),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.white.withOpacity(0.08)),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
       ),
     ),
     textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
@@ -37,9 +36,8 @@ class AppTheme {
       primary: primary,
       secondary: secondary,
       surface: Colors.white,
-      background: Color(0xFFF8FAFC),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(
