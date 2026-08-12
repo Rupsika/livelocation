@@ -101,6 +101,6 @@ flutter run -d chrome
 2. Configure settings:
    - **Server URL**: `http://<YOUR_IP>:8000/api/location/update`
    - **Location Frequency**: 3–5 seconds
-   - **HTTP Headers**: `X-API-KEY: secret_traccar_key_123`
+   - **HTTP Headers**: `X-API-KEY: <YOUR_API_KEY>`
 3. Turn on **Service Status** in the app.
 4. Watch the web dashboard marker move live with a **`LIVE (TRACCAR)`** badge!
