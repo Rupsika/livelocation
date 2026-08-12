@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/tracking_provider.dart';
 import 'theme/app_theme.dart';
-import 'widgets/purple_sidebar.dart';
+import 'widgets/employee_sidebar.dart';
 import 'widgets/gradient_metric_card.dart';
 import 'widgets/employee_card.dart';
 import 'widgets/live_map.dart';
@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
       child: Consumer<TrackingProvider>(
         builder: (context, provider, _) {
           return MaterialApp(
-            title: 'Purple Admin Dashboard',
+            title: 'Live Location Tracking Dashboard (Flutter Web)',
             debugShowCheckedModeBanner: false,
             themeMode: provider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            home: const PurpleAdminDashboard(),
+            home: const EmployeeTrackerDashboardScreen(),
           );
         },
       ),
@@ -37,14 +37,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class PurpleAdminDashboard extends StatefulWidget {
-  const PurpleAdminDashboard({super.key});
+class EmployeeTrackerDashboardScreen extends StatefulWidget {
+  const EmployeeTrackerDashboardScreen({super.key});
 
   @override
-  State<PurpleAdminDashboard> createState() => _PurpleAdminDashboardState();
+  State<EmployeeTrackerDashboardScreen> createState() =>
+      _EmployeeTrackerDashboardScreenState();
 }
 
-class _PurpleAdminDashboardState extends State<PurpleAdminDashboard> {
+class _EmployeeTrackerDashboardScreenState
+    extends State<EmployeeTrackerDashboardScreen> {
   int _selectedNavIndex = 0;
 
   @override
@@ -55,11 +57,11 @@ class _PurpleAdminDashboardState extends State<PurpleAdminDashboard> {
     return Scaffold(
       body: Row(
         children: [
-          // Purple Admin Sidebar Navigation (Matches image template)
+          // Project-Specific Employee Tracker Sidebar
           LayoutBuilder(
             builder: (context, constraints) {
               if (MediaQuery.of(context).size.width >= 900) {
-                return PurpleSidebarNavigation(
+                return EmployeeSidebarNavigation(
                   selectedIndex: _selectedNavIndex,
                   onDestinationSelected: (idx) {
                     setState(() => _selectedNavIndex = idx);
@@ -70,122 +72,97 @@ class _PurpleAdminDashboardState extends State<PurpleAdminDashboard> {
             },
           ),
 
-          // Main Center Dashboard Area
+          // Main Center Content Canvas
           Expanded(
             child: Column(
               children: [
-                // Top Header Bar matching Purple Admin (Search + Profile & Action Buttons)
+                // Top Header Bar with Project Title
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                   color: Colors.white,
                   child: Row(
                     children: [
-                      const Icon(Icons.search, size: 18, color: Colors.grey),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Search projects',
-                          style: GoogleFonts.ubuntu(
-                              color: Colors.grey.shade400, fontSize: 13),
-                        ),
-                      ),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const CircleAvatar(
-                            radius: 14,
-                            backgroundImage: NetworkImage(
-                              'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-                            ),
-                          ),
-                          const SizedBox(width: 8),
                           Text(
-                            'David Grey. H',
+                            'Demo Project – Live Location Tracking Dashboard',
                             style: GoogleFonts.ubuntu(
-                              fontSize: 12,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
                             ),
                           ),
-                          const Icon(Icons.keyboard_arrow_down,
-                              size: 16, color: Colors.grey),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.fullscreen_rounded,
-                              size: 18, color: Colors.grey),
-                          const SizedBox(width: 12),
-                          const Icon(Icons.email_outlined,
-                              size: 18, color: Colors.grey),
-                          const SizedBox(width: 12),
-                          const Icon(Icons.notifications_none_rounded,
-                              size: 18, color: Colors.grey),
-                          const SizedBox(width: 12),
-                          const Icon(Icons.power_settings_new_rounded,
-                              size: 18, color: Colors.grey),
+                          Text(
+                            'Flutter Web • Real-Time Employee Telemetry Monitoring',
+                            style: GoogleFonts.ubuntu(
+                              fontSize: 11,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-
-                // Sub-header Banner ("Dashboard")
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryPurple,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Icon(Icons.home,
-                            color: Colors.white, size: 16),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Dashboard',
-                        style: GoogleFonts.ubuntu(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
                       const Spacer(),
-                      // Upgrade / Action Buttons matching template
+
+                      // Active Employee Selector Dropdown
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
+                            horizontal: 12, vertical: 2),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(6),
                           border: Border.all(color: Colors.grey.shade300),
                         ),
-                        child: Text(
-                          'Download Free Version',
-                          style: GoogleFonts.ubuntu(
-                              fontSize: 12, color: Colors.black87),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: provider.selectedEmployeeId,
+                            icon: const Icon(Icons.keyboard_arrow_down,
+                                size: 18),
+                            items: provider.employeeList.map((e) {
+                              return DropdownMenuItem<String>(
+                                value: e['id'],
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 12,
+                                      backgroundImage:
+                                          NetworkImage(e['avatar']!),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      e['name']!,
+                                      style: GoogleFonts.ubuntu(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) provider.selectEmployee(val);
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFDA8CFF), Color(0xFF9A55FF)],
-                          ),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          'Upgrade To Pro',
-                          style: GoogleFonts.ubuntu(
-                            fontSize: 12,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+
+                      // Sync Telemetry Action Button
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primary,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
                           ),
                         ),
+                        onPressed: () => provider.refreshLocation(),
+                        icon: const Icon(Icons.sync_rounded, size: 16),
+                        label: const Text('Refresh GPS',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -198,76 +175,37 @@ class _PurpleAdminDashboardState extends State<PurpleAdminDashboard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 3 Top Colorful Gradient Metric Cards (Pink, Blue, Teal like Purple Admin)
+                        // 3 Metric Stat Cards (Speed, Battery Level, Telemetry Logs)
                         Row(
                           children: [
                             GradientMetricCard(
                               title: 'Current Speed',
                               value: '${emp?.speed ?? 24.5} km/h',
-                              subtitle: 'Increased by 60%',
-                              icon: Icons.show_chart_rounded,
-                              gradientColors: AppTheme.gradientPink,
+                              subtitle: 'GPS Telemetry Active',
+                              icon: Icons.speed_rounded,
+                              gradientColors: AppTheme.gradientBlue,
                             ),
                             const SizedBox(width: 16),
                             GradientMetricCard(
                               title: 'Battery Level',
                               value: '${emp?.battery ?? 88}%',
-                              subtitle: 'Decreased by 10%',
+                              subtitle: 'Device Status: Healthy',
                               icon: Icons.battery_charging_full_rounded,
-                              gradientColors: AppTheme.gradientBlue,
+                              gradientColors: AppTheme.gradientTeal,
                             ),
                             const SizedBox(width: 16),
                             GradientMetricCard(
-                              title: 'Telemetry Logs',
+                              title: 'Location History Logs',
                               value: '${emp?.history.length ?? 20} Logs',
-                              subtitle: 'Increased by 5%',
-                              icon: Icons.diamond_outlined,
-                              gradientColors: AppTheme.gradientTeal,
+                              subtitle: 'Latest 20 Records Retained',
+                              icon: Icons.history_rounded,
+                              gradientColors: AppTheme.gradientOrange,
                             ),
                           ],
                         ),
                         const SizedBox(height: 24),
 
-                        // Employee Selector Row
-                        Row(
-                          children: [
-                            Text(
-                              'Active Device / Employee: ',
-                              style: GoogleFonts.ubuntu(
-                                  fontSize: 13, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: provider.selectedEmployeeId,
-                                  items: provider.employeeList.map((e) {
-                                    return DropdownMenuItem<String>(
-                                      value: e['id'],
-                                      child: Text(
-                                        e['name']!,
-                                        style: GoogleFonts.ubuntu(fontSize: 12),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    if (val != null) provider.selectEmployee(val);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Two Main Section Cards: Telemetry Panel + Live Map
+                        // Main Content Sections: Employee Card + Controls on Left, Map on Right
                         LayoutBuilder(
                           builder: (context, constraints) {
                             final isDesktop = constraints.maxWidth >= 900;
@@ -312,7 +250,7 @@ class _PurpleAdminDashboardState extends State<PurpleAdminDashboard> {
                         ),
                         const SizedBox(height: 24),
 
-                        // Location History Logs Table
+                        // Location History Table
                         const LocationHistoryTable(),
                         const SizedBox(height: 24),
                       ],

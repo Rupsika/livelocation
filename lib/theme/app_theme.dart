@@ -2,27 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Vibrant Purple Admin Theme (Matching Purple Admin Template)
-  static const Color primaryPurple = Color(0xFF9A55FF); // Vibrant Purple accent
-  static const Color primary = Color(0xFF9A55FF);
-  static const Color secondary = Color(0xFF3699FF);
+  // Clean Professional Navy / Indigo Accent Palette
+  static const Color primary = Color(0xFF3B82F6); // Clean Indigo/Blue Primary Accent
+  static const Color secondary = Color(0xFF10B981); // Emerald Secondary
   static const Color sidebarBg = Color(0xFFFFFFFF);
-  static const Color scaffoldBg = Color(0xFFF2F4F9); // Light soft purple-grey background
-  static const Color onlineGreen = Color(0xFF1B84FF);
-  static const Color offlineRed = Color(0xFFF1416C);
-  static const Color warningOrange = Color(0xFFFF9900);
+  static const Color scaffoldBg = Color(0xFFF3F4F6); // Soft clean grey background
+  static const Color onlineGreen = Color(0xFF10B981);
+  static const Color offlineRed = Color(0xFFEF4444);
+  static const Color warningOrange = Color(0xFFF59E0B);
 
-  // Gradient definitions from Purple Admin
-  static const List<Color> gradientPink = [Color(0xFFFFBF96), Color(0xFFFE7096)];
-  static const List<Color> gradientBlue = [Color(0xFF90CAF9), Color(0xFF047DF6)];
-  static const List<Color> gradientTeal = [Color(0xFF84D9D2), Color(0xFF07CDAE)];
+  // Clean Metric Card Gradients
+  static const List<Color> gradientBlue = [Color(0xFF60A5FA), Color(0xFF2563EB)];
+  static const List<Color> gradientTeal = [Color(0xFF34D399), Color(0xFF059669)];
+  static const List<Color> gradientOrange = [Color(0xFFFBBF24), Color(0xFFD97706)];
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     scaffoldBackgroundColor: scaffoldBg,
     colorScheme: const ColorScheme.light(
-      primary: primaryPurple,
+      primary: primary,
       secondary: secondary,
       surface: Colors.white,
     ),
@@ -31,7 +30,7 @@ class AppTheme {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: Colors.grey.withValues(alpha: 0.1)),
+        side: BorderSide(color: Colors.grey.withValues(alpha: 0.15)),
       ),
     ),
     textTheme: GoogleFonts.ubuntuTextTheme(ThemeData.light().textTheme),
@@ -40,14 +39,14 @@ class AppTheme {
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color(0xFF181824),
+    scaffoldBackgroundColor: const Color(0xFF111827),
     colorScheme: const ColorScheme.dark(
-      primary: primaryPurple,
+      primary: primary,
       secondary: secondary,
-      surface: Color(0xFF1E1E2D),
+      surface: Color(0xFF1F2937),
     ),
     cardTheme: CardThemeData(
-      color: const Color(0xFF1E1E2D),
+      color: const Color(0xFF1F2937),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
