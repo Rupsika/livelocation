@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/tracking_provider.dart';
 import 'theme/app_theme.dart';
-import 'widgets/slate_sidebar.dart';
-import 'widgets/white_metric_card.dart';
+import 'widgets/purple_sidebar.dart';
+import 'widgets/gradient_metric_card.dart';
 import 'widgets/employee_card.dart';
 import 'widgets/live_map.dart';
 import 'widgets/location_history.dart';
@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
       child: Consumer<TrackingProvider>(
         builder: (context, provider, _) {
           return MaterialApp(
-            title: 'Dashboard User Admin Panel',
+            title: 'Purple Admin Dashboard',
             debugShowCheckedModeBanner: false,
             themeMode: provider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            home: const SlateAdminDashboard(),
+            home: const PurpleAdminDashboard(),
           );
         },
       ),
@@ -37,15 +37,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class SlateAdminDashboard extends StatefulWidget {
-  const SlateAdminDashboard({super.key});
+class PurpleAdminDashboard extends StatefulWidget {
+  const PurpleAdminDashboard({super.key});
 
   @override
-  State<SlateAdminDashboard> createState() => _SlateAdminDashboardState();
+  State<PurpleAdminDashboard> createState() => _PurpleAdminDashboardState();
 }
 
-class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
-  int _selectedNavIndex = 1;
+class _PurpleAdminDashboardState extends State<PurpleAdminDashboard> {
+  int _selectedNavIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +55,11 @@ class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
     return Scaffold(
       body: Row(
         children: [
-          // Slate Navy Sidebar (Ditto like template image)
+          // Purple Admin Sidebar Navigation (Matches image template)
           LayoutBuilder(
             builder: (context, constraints) {
               if (MediaQuery.of(context).size.width >= 900) {
-                return SlateSidebarNavigation(
+                return PurpleSidebarNavigation(
                   selectedIndex: _selectedNavIndex,
                   onDestinationSelected: (idx) {
                     setState(() => _selectedNavIndex = idx);
@@ -70,52 +70,121 @@ class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
             },
           ),
 
-          // Main Dashboard Panel Body
+          // Main Center Dashboard Area
           Expanded(
             child: Column(
               children: [
-                // Top Header Bar matching "Dashboard User Admin Panel"
+                // Top Header Bar matching Purple Admin (Search + Profile & Action Buttons)
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                  color: Colors.white,
+                  child: Row(
                     children: [
+                      const Icon(Icons.search, size: 18, color: Colors.grey),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Search projects',
+                          style: GoogleFonts.ubuntu(
+                              color: Colors.grey.shade400, fontSize: 13),
+                        ),
+                      ),
                       Row(
                         children: [
-                          Text(
-                            'Dashboard User Admin Panel',
-                            style: GoogleFonts.ptSerif(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.primaryTeal,
+                          const CircleAvatar(
+                            radius: 14,
+                            backgroundImage: NetworkImage(
+                              'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
                             ),
                           ),
-                          const Spacer(),
-                          // User Profile dropdown menu (Lorem Ipsum v)
-                          Row(
-                            children: [
-                              Text(
-                                'Lorem Ipsum',
-                                style: GoogleFonts.montserrat(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey.shade700,
-                                ),
-                              ),
-                              const Icon(Icons.keyboard_arrow_down,
-                                  size: 18, color: Colors.grey),
-                            ],
+                          const SizedBox(width: 8),
+                          Text(
+                            'David Grey. H',
+                            style: GoogleFonts.ubuntu(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
                           ),
+                          const Icon(Icons.keyboard_arrow_down,
+                              size: 16, color: Colors.grey),
+                          const SizedBox(width: 16),
+                          const Icon(Icons.fullscreen_rounded,
+                              size: 18, color: Colors.grey),
+                          const SizedBox(width: 12),
+                          const Icon(Icons.email_outlined,
+                              size: 18, color: Colors.grey),
+                          const SizedBox(width: 12),
+                          const Icon(Icons.notifications_none_rounded,
+                              size: 18, color: Colors.grey),
+                          const SizedBox(width: 12),
+                          const Icon(Icons.power_settings_new_rounded,
+                              size: 18, color: Colors.grey),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                    ],
+                  ),
+                ),
+
+                // Sub-header Banner ("Dashboard")
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryPurple,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Icon(Icons.home,
+                            color: Colors.white, size: 16),
+                      ),
+                      const SizedBox(width: 10),
                       Text(
-                        'Lorem ipsum dolor sit amet consectetur',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 12,
-                          color: Colors.grey,
+                        'Dashboard',
+                        style: GoogleFonts.ubuntu(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const Spacer(),
+                      // Upgrade / Action Buttons matching template
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Text(
+                          'Download Free Version',
+                          style: GoogleFonts.ubuntu(
+                              fontSize: 12, color: Colors.black87),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFDA8CFF), Color(0xFF9A55FF)],
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          'Upgrade To Pro',
+                          style: GoogleFonts.ubuntu(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -125,40 +194,46 @@ class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
                 // Main Content Body
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 28),
+                    padding: const EdgeInsets.all(24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 3 Top White Stat Cards (1,546 | 687 | 13,249 style)
+                        // 3 Top Colorful Gradient Metric Cards (Pink, Blue, Teal like Purple Admin)
                         Row(
                           children: [
-                            WhiteMetricCard(
-                              title: 'Sed eiusmod tempor',
-                              subtitle: 'Lorem ipsum dolor sit amet',
-                              value: '${(emp?.speed ?? 24.5) * 60}',
+                            GradientMetricCard(
+                              title: 'Current Speed',
+                              value: '${emp?.speed ?? 24.5} km/h',
+                              subtitle: 'Increased by 60%',
+                              icon: Icons.show_chart_rounded,
+                              gradientColors: AppTheme.gradientPink,
                             ),
                             const SizedBox(width: 16),
-                            WhiteMetricCard(
-                              title: 'Incididunt ut labore',
-                              subtitle: 'Lorem ipsum dolor sit amet',
+                            GradientMetricCard(
+                              title: 'Battery Level',
                               value: '${emp?.battery ?? 88}%',
+                              subtitle: 'Decreased by 10%',
+                              icon: Icons.battery_charging_full_rounded,
+                              gradientColors: AppTheme.gradientBlue,
                             ),
                             const SizedBox(width: 16),
-                            WhiteMetricCard(
-                              title: 'Dolore magna aliqua',
-                              subtitle: 'Lorem ipsum dolor sit amet',
-                              value: '13,249',
+                            GradientMetricCard(
+                              title: 'Telemetry Logs',
+                              value: '${emp?.history.length ?? 20} Logs',
+                              subtitle: 'Increased by 5%',
+                              icon: Icons.diamond_outlined,
+                              gradientColors: AppTheme.gradientTeal,
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 24),
 
-                        // Employee Selector Header Row
+                        // Employee Selector Row
                         Row(
                           children: [
                             Text(
-                              'Select Employee: ',
-                              style: GoogleFonts.montserrat(
+                              'Active Device / Employee: ',
+                              style: GoogleFonts.ubuntu(
                                   fontSize: 13, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(width: 8),
@@ -176,9 +251,10 @@ class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
                                   items: provider.employeeList.map((e) {
                                     return DropdownMenuItem<String>(
                                       value: e['id'],
-                                      child: Text(e['name']!,
-                                          style: GoogleFonts.montserrat(
-                                              fontSize: 12)),
+                                      child: Text(
+                                        e['name']!,
+                                        style: GoogleFonts.ubuntu(fontSize: 12),
+                                      ),
                                     );
                                   }).toList(),
                                   onChanged: (val) {
@@ -191,7 +267,7 @@ class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
                         ),
                         const SizedBox(height: 16),
 
-                        // Two Main Cards: Employee Info + Live Map
+                        // Two Main Section Cards: Telemetry Panel + Live Map
                         LayoutBuilder(
                           builder: (context, constraints) {
                             final isDesktop = constraints.maxWidth >= 900;
@@ -200,7 +276,7 @@ class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(
-                                    width: 340,
+                                    width: 360,
                                     child: Column(
                                       children: [
                                         EmployeeCard(),
@@ -212,7 +288,7 @@ class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
                                   const SizedBox(width: 20),
                                   const Expanded(
                                     child: SizedBox(
-                                      height: 520,
+                                      height: 560,
                                       child: LiveMap(),
                                     ),
                                   ),
@@ -236,7 +312,7 @@ class _SlateAdminDashboardState extends State<SlateAdminDashboard> {
                         ),
                         const SizedBox(height: 24),
 
-                        // Location History Table
+                        // Location History Logs Table
                         const LocationHistoryTable(),
                         const SizedBox(height: 24),
                       ],

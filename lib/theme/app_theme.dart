@@ -2,55 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const Color primary = Color(0xFF388E8E); // Primary Teal
-  static const Color primaryTeal = Color(0xFF388E8E);
-  static const Color secondary = Color(0xFF88D49E);
-  static const Color accentGreen = Color(0xFF88D49E);
-  static const Color sidebarBg = Color(0xFF2C4A6F); // Slate Navy
-  static const Color scaffoldBg = Color(0xFFEFEFEF);
-  static const Color cardBg = Color(0xFFFFFFFF);
+  // Vibrant Purple Admin Theme (Matching Purple Admin Template)
+  static const Color primaryPurple = Color(0xFF9A55FF); // Vibrant Purple accent
+  static const Color primary = Color(0xFF9A55FF);
+  static const Color secondary = Color(0xFF3699FF);
+  static const Color sidebarBg = Color(0xFFFFFFFF);
+  static const Color scaffoldBg = Color(0xFFF2F4F9); // Light soft purple-grey background
+  static const Color onlineGreen = Color(0xFF1B84FF);
+  static const Color offlineRed = Color(0xFFF1416C);
+  static const Color warningOrange = Color(0xFFFF9900);
 
-  static const Color onlineGreen = Color(0xFF2ECC71);
-  static const Color offlineRed = Color(0xFFE74C3C);
-  static const Color warningOrange = Color(0xFFF39C12);
+  // Gradient definitions from Purple Admin
+  static const List<Color> gradientPink = [Color(0xFFFFBF96), Color(0xFFFE7096)];
+  static const List<Color> gradientBlue = [Color(0xFF90CAF9), Color(0xFF047DF6)];
+  static const List<Color> gradientTeal = [Color(0xFF84D9D2), Color(0xFF07CDAE)];
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     scaffoldBackgroundColor: scaffoldBg,
     colorScheme: const ColorScheme.light(
-      primary: primaryTeal,
-      secondary: accentGreen,
-      surface: cardBg,
+      primary: primaryPurple,
+      secondary: secondary,
+      surface: Colors.white,
     ),
     cardTheme: CardThemeData(
-      color: cardBg,
+      color: Colors.white,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-        side: const BorderSide(color: Color(0xFFE0E0E0)),
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: Colors.grey.withValues(alpha: 0.1)),
       ),
     ),
-    textTheme: GoogleFonts.montserratTextTheme(ThemeData.light().textTheme),
+    textTheme: GoogleFonts.ubuntuTextTheme(ThemeData.light().textTheme),
   );
 
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color(0xFF1E272C),
+    scaffoldBackgroundColor: const Color(0xFF181824),
     colorScheme: const ColorScheme.dark(
-      primary: primaryTeal,
-      secondary: accentGreen,
-      surface: Color(0xFF2C3E50),
+      primary: primaryPurple,
+      secondary: secondary,
+      surface: Color(0xFF1E1E2D),
     ),
     cardTheme: CardThemeData(
-      color: const Color(0xFF2C3E50),
+      color: const Color(0xFF1E1E2D),
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-        side: const BorderSide(color: Color(0xFF34495E)),
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
       ),
     ),
-    textTheme: GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme),
+    textTheme: GoogleFonts.ubuntuTextTheme(ThemeData.dark().textTheme),
   );
 }
