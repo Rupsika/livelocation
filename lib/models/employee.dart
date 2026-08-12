@@ -13,6 +13,7 @@ class Employee {
   final double speed;
   final int battery;
   final bool isSimulating;
+  final String source; // "live" vs "simulated"
   final List<LocationLog> history;
 
   Employee({
@@ -28,6 +29,7 @@ class Employee {
     required this.speed,
     required this.battery,
     required this.isSimulating,
+    this.source = 'simulated',
     required this.history,
   });
 
@@ -50,6 +52,7 @@ class Employee {
       speed: (json['speed'] as num?)?.toDouble() ?? 0.0,
       battery: (json['battery'] as num?)?.toInt() ?? 100,
       isSimulating: json['is_simulating'] ?? true,
+      source: json['source'] ?? 'simulated',
       history: parsedHistory,
     );
   }

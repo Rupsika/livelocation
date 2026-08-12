@@ -17,12 +17,23 @@ class EmployeeCard extends StatelessWidget {
         child: Container(
           height: 280,
           alignment: Alignment.center,
-          child: const CircularProgressIndicator(),
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 12),
+              Text(
+                'Connecting to location server...',
+                style: TextStyle(fontSize: 13, color: Colors.grey),
+              ),
+            ],
+          ),
         ),
       );
     }
 
     final isOnline = emp.status.toLowerCase() == 'online';
+    final isLive = emp.source.toLowerCase() == 'live';
 
     return Card(
       child: Padding(
@@ -31,7 +42,7 @@ class EmployeeCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header Row: Avatar, Name & Online Badge
+            // Header Row: Avatar, Name, Online Badge & Live/Simulated Source Tag (3.3)
             Row(
               children: [
                 Stack(
@@ -65,7 +76,7 @@ class EmployeeCard extends StatelessWidget {
                       Text(
                         emp.name,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 17,
                           fontWeight: FontWeight.bold,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -74,45 +85,86 @@ class EmployeeCard extends StatelessWidget {
                       Text(
                         emp.role,
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 12,
                           color: Colors.grey.shade500,
                         ),
                       ),
                     ],
                   ),
                 ),
-                // Online/Offline Pill Badge
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: isOnline
-                        ? AppTheme.onlineGreen.withOpacity(0.15)
-                        : AppTheme.offlineRed.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.circle,
-                        size: 8,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Online/Offline Pill Badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
                         color: isOnline
-                            ? AppTheme.onlineGreen
-                            : AppTheme.offlineRed,
+                            ? AppTheme.onlineGreen.withValues(alpha: 0.15)
+                            : AppTheme.offlineRed.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        emp.status,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: isOnline
-                              ? AppTheme.onlineGreen
-                              : AppTheme.offlineRed,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 7,
+                            color: isOnline
+                                ? AppTheme.onlineGreen
+                                : AppTheme.offlineRed,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            emp.status,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: isOnline
+                                  ? AppTheme.onlineGreen
+                                  : AppTheme.offlineRed,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    // 3.3 Live vs Simulated Source Badge Tag
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: isLive
+                            ? Colors.purple.withValues(alpha: 0.15)
+                            : Colors.orange.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: isLive ? Colors.purple : Colors.orange,
+                          width: 1,
                         ),
                       ),
-                    ],
-                  ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isLive ? Icons.sensors_rounded : Icons.route_rounded,
+                            size: 10,
+                            color: isLive ? Colors.purple : Colors.orange,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            isLive ? 'LIVE (TRACCAR)' : 'SIMULATED',
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w900,
+                              color: isLive ? Colors.purple : Colors.orange,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -166,7 +218,7 @@ class EmployeeCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
@@ -219,7 +271,7 @@ class EmployeeCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 18, color: AppTheme.primary.withOpacity(0.8)),
+        Icon(icon, size: 18, color: AppTheme.primary.withValues(alpha: 0.8)),
         const SizedBox(width: 8),
         Expanded(
           child: Column(

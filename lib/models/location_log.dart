@@ -6,6 +6,7 @@ class LocationLog {
   final double speed;
   final int battery;
   final String status;
+  final String source; // "live" vs "simulated"
 
   LocationLog({
     required this.time,
@@ -15,6 +16,7 @@ class LocationLog {
     required this.speed,
     required this.battery,
     required this.status,
+    this.source = 'simulated',
   });
 
   factory LocationLog.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class LocationLog {
       speed: (json['speed'] as num?)?.toDouble() ?? 0.0,
       battery: (json['battery'] as num?)?.toInt() ?? 0,
       status: json['status'] ?? 'Offline',
+      source: json['source'] ?? 'simulated',
     );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/tracking_provider.dart';
 import '../theme/app_theme.dart';
-import '../models/location_log.dart';
 
 class LocationHistoryTable extends StatefulWidget {
   const LocationHistoryTable({super.key});
@@ -35,7 +34,8 @@ class _LocationHistoryTableState extends State<LocationHistoryTable> {
       return log.time.toLowerCase().contains(q) ||
           log.address.toLowerCase().contains(q) ||
           log.latitude.toString().contains(q) ||
-          log.longitude.toString().contains(q);
+          log.longitude.toString().contains(q) ||
+          log.source.toLowerCase().contains(q);
     }).toList();
 
     return Card(
@@ -61,7 +61,7 @@ class _LocationHistoryTableState extends State<LocationHistoryTable> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppTheme.primary.withOpacity(0.15),
+                    color: AppTheme.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -93,7 +93,7 @@ class _LocationHistoryTableState extends State<LocationHistoryTable> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                            color: Colors.grey.withOpacity(0.3)),
+                            color: Colors.grey.withValues(alpha: 0.3)),
                       ),
                     ),
                   ),
@@ -118,6 +118,9 @@ class _LocationHistoryTableState extends State<LocationHistoryTable> {
                           label: Text('Time',
                               style: TextStyle(fontWeight: FontWeight.bold))),
                       DataColumn(
+                          label: Text('Source',
+                              style: TextStyle(fontWeight: FontWeight.bold))),
+                      DataColumn(
                           label: Text('Latitude',
                               style: TextStyle(fontWeight: FontWeight.bold))),
                       DataColumn(
@@ -139,6 +142,8 @@ class _LocationHistoryTableState extends State<LocationHistoryTable> {
                     rows: filteredLogs.map((log) {
                       final isSelected =
                           provider.highlightedHistoryLog == log;
+                      final isLive = log.source.toLowerCase() == 'live';
+
                       return DataRow(
                         selected: isSelected,
                         onSelectChanged: (_) {
@@ -148,6 +153,25 @@ class _LocationHistoryTableState extends State<LocationHistoryTable> {
                           DataCell(Text(log.time,
                               style: const TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 13))),
+                          // 3.3 Source Tag in table
+                          DataCell(Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: isLive
+                                  ? Colors.purple.withValues(alpha: 0.15)
+                                  : Colors.orange.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              isLive ? 'LIVE' : 'SIM',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: isLive ? Colors.purple : Colors.orange,
+                              ),
+                            ),
+                          )),
                           DataCell(Text(log.latitude.toStringAsFixed(6),
                               style: const TextStyle(
                                   fontFamily: 'monospace', fontSize: 12))),

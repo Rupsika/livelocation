@@ -4,7 +4,13 @@ import 'package:http/http.dart' as http;
 import '../models/employee.dart';
 
 class ApiService {
-  static String baseUrl = 'http://127.0.0.1:8000';
+  // 2.2 Externalize base URL using --dart-define=API_BASE_URL=https://...
+  static String baseUrl = const String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://127.0.0.1:8000',
+  );
+
+  static const String apiKey = 'secret_traccar_key_123';
 
   static Future<List<Map<String, String>>> fetchEmployeeList() async {
     try {
@@ -56,7 +62,7 @@ class ApiService {
     try {
       final response = await http
           .get(Uri.parse('$baseUrl/api/employee/$empId/location'))
-          .timeout(const Duration(seconds: 4));
+          .timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         return Employee.fromJson(data);
@@ -88,7 +94,10 @@ class ApiService {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/api/location/update'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': apiKey, // Pass 1.2 Auth Key Header
+        },
         body: jsonEncode({
           'id': empId,
           'latitude': lat,
